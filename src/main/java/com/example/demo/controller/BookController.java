@@ -1,8 +1,10 @@
 // controller/BookController.java
 package com.example.demo.controller;
 
+import com.example.demo.dto.BookResponse;
 import com.example.demo.model.Book;
 import com.example.demo.service.BookService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public class BookController {
 
     // CREATE
     @PostMapping
-    public Book createBook(@RequestBody Book book) {
+    public Book createBook(@Valid @RequestBody Book book) {
         return bookService.addBook(book);
     }
 
@@ -44,5 +46,14 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
+    }
+
+    @GetMapping("/dto")
+    public BookResponse getBookDto() {
+        // This Data could come from a DB
+        Book book = new Book("Spring Boot 3", "Craig Walls");
+
+        String  summery = book.getTitle() + "by" + book.getAuthor();
+        return new BookResponse(book.getTitle(), summery);
     }
 }
